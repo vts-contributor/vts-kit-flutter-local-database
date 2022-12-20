@@ -1,10 +1,10 @@
 import 'package:vts_sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:sqflite_common_ffi_web/src/debug/debug.dart';
-import 'package:sqflite_common_ffi_web/src/sqflite_ffi_impl_web.dart'
+import 'package:vts_sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:vts_sqflite_common_ffi_web/src/debug/debug.dart';
+import 'package:vts_sqflite_common_ffi_web/src/sqflite_ffi_impl_web.dart'
     show SqfliteFfiHandlerWeb;
-import 'package:sqflite_common_ffi_web/src/utils.dart';
-import 'package:sqflite_common_ffi_web/src/web/load_sqlite_web.dart'
+import 'package:vts_sqflite_common_ffi_web/src/utils.dart';
+import 'package:vts_sqflite_common_ffi_web/src/web/load_sqlite_web.dart'
     show SqfliteFfiWebContextExt;
 import 'package:synchronized/synchronized.dart';
 

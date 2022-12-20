@@ -1,4 +1,4 @@
-import 'package:sqflite_common_ffi_web/src/utils.dart';
+import 'package:vts_sqflite_common_ffi_web/src/utils.dart';
 import 'package:test/test.dart';
 
 void main() {

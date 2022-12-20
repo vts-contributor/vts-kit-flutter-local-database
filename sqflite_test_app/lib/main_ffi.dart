@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vts_sqflite/sqflite.dart';
 import 'package:vts_sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:vts_sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:sqflite_example/database/database.dart';
 import 'package:sqflite_example/main.dart';
 import 'package:sqflite_test_app/database/database.dart';

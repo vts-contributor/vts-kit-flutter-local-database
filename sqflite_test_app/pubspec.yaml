@@ -24,10 +24,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  sqflite: '>=2.0.0-nullsafety.2'
-  sqflite_common_ffi:
+  vts_sqflite:
+  vts_sqflite_common_ffi:
   sqflite_example:
-    path: ../sqflite/example
+    path: ../vts_sqflite/example
   flutter_web_plugins:
     sdk: flutter
   path_provider:
@@ -35,7 +35,7 @@ dependencies:
   dev_test:
   process_run: '>=0.11.0+2'
   path:
-  sqflite_common_ffi_web:
+  vts_sqflite_common_ffi_web:
 
 dev_dependencies:
   flutter_lints:
@@ -52,14 +52,14 @@ dev_dependencies:
   sqlite3_flutter_libs:
 
 dependency_overrides:
-  sqflite:
-    path: ../sqflite
+  vts_sqflite:
+    path: ../vts_sqflite
   vts_sqflite_common:
     path: ../vts_sqflite_common
-  sqflite_common_ffi:
-    path: ../sqflite_common_ffi
-  sqflite_common_ffi_web:
-    path: ../packages_web/sqflite_common_ffi_web
+  vts_sqflite_common_ffi:
+    path: ../vts_sqflite_common_ffi
+  vts_sqflite_common_ffi_web:
+    path: ../packages_web/vts_sqflite_common_ffi_web
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

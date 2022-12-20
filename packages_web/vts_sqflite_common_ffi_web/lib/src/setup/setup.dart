@@ -7,7 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:sqflite_common_ffi_web/src/constant.dart';
+import 'package:vts_sqflite_common_ffi_web/src/constant.dart';
 
 // https://github.com/simolus3/sqlite3.dart/releases
 var _sqlite3WasmVersion = Version(1, 9, 1);

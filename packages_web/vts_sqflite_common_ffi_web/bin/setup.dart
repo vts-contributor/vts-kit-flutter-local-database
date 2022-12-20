@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:sqflite_common_ffi_web/src/setup/setup.dart';
+import 'package:vts_sqflite_common_ffi_web/src/setup/setup.dart';
 
 var noSqlite3Wasm = 'no-sqlite3-wasm';
 

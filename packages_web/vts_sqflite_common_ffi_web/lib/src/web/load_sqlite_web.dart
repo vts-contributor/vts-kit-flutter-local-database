@@ -3,10 +3,10 @@ import 'dart:js_util';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:sqflite_common_ffi_web/src/constant.dart';
-import 'package:sqflite_common_ffi_web/src/debug/debug.dart';
-import 'package:sqflite_common_ffi_web/src/sqflite_ffi_impl_web.dart';
+import 'package:vts_sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:vts_sqflite_common_ffi_web/src/constant.dart';
+import 'package:vts_sqflite_common_ffi_web/src/debug/debug.dart';
+import 'package:vts_sqflite_common_ffi_web/src/sqflite_ffi_impl_web.dart';
 import 'package:sqlite3/wasm.dart';
 
 bool get _debug => sqliteFfiWebDebugWebWorker;

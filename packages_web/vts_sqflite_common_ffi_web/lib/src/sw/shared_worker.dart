@@ -1,10 +1,10 @@
 import 'dart:html';
 
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:sqflite_common_ffi_web/src/debug/debug.dart';
-import 'package:sqflite_common_ffi_web/src/import.dart';
-import 'package:sqflite_common_ffi_web/src/sqflite_ffi_impl_web.dart'; // ignore: implementation_imports
-import 'package:sqflite_common_ffi_web/src/utils.dart';
+import 'package:vts_sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:vts_sqflite_common_ffi_web/src/debug/debug.dart';
+import 'package:vts_sqflite_common_ffi_web/src/import.dart';
+import 'package:vts_sqflite_common_ffi_web/src/sqflite_ffi_impl_web.dart'; // ignore: implementation_imports
+import 'package:vts_sqflite_common_ffi_web/src/utils.dart';
 
 import 'constants.dart';
 

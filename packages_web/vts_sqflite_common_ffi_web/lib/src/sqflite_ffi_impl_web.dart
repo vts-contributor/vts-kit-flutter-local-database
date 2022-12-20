@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:html' as html;
 
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:sqflite_common_ffi_web/src/debug/debug.dart';
-import 'package:sqflite_common_ffi_web/src/web/load_sqlite_web.dart';
+import 'package:vts_sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:vts_sqflite_common_ffi_web/src/debug/debug.dart';
+import 'package:vts_sqflite_common_ffi_web/src/web/load_sqlite_web.dart';
 import 'package:sqlite3/wasm.dart';
 
 import 'import.dart';

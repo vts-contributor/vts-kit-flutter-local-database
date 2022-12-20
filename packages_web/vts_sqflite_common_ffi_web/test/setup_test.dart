@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
-import 'package:sqflite_common_ffi_web/src/constant.dart';
-import 'package:sqflite_common_ffi_web/src/setup/setup.dart';
+import 'package:vts_sqflite_common_ffi_web/src/constant.dart';
+import 'package:vts_sqflite_common_ffi_web/src/setup/setup.dart';
 import 'package:test/test.dart';
 
 void deleteFileSync(String path) {

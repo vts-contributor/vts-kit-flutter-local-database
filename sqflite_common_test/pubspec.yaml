@@ -7,8 +7,8 @@ environment:
   sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
-  sqflite_common_ffi: '>=2.2.0-dev.5 <4.0.0'
-  vts_sqflite_common: '>=2.4.0-dev.5 <4.0.0'
+  vts_sqflite_common_ffi:
+  vts_sqflite_common:
   test:
   path:
   synchronized:
@@ -20,5 +20,5 @@ dev_dependencies:
 dependency_overrides:
   vts_sqflite_common:
     path: ../vts_sqflite_common
-  sqflite_common_ffi:
-    path: ../sqflite_common_ffi
+  vts_sqflite_common_ffi:
+    path: ../vts_sqflite_common_ffi

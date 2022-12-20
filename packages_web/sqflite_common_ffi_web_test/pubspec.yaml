@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   path: ^1.7.0
-  sqflite_common_ffi_web:
-  sqflite_common_ffi:
+  vts_sqflite_common_ffi_web:
+  vts_sqflite_common_ffi:
   vts_sqflite_common:
   sqflite_common_test:
     path: ../../sqflite_common_test
@@ -20,10 +20,10 @@ dev_dependencies:
   process_run:
   test:
 dependency_overrides:
-  sqflite_common_ffi_web:
-    path: ../sqflite_common_ffi_web
-  sqflite_common_ffi:
-    path: ../../sqflite_common_ffi
+  vts_sqflite_common_ffi_web:
+    path: ../vts_sqflite_common_ffi_web
+  vts_sqflite_common_ffi:
+    path: ../../vts_sqflite_common_ffi
   vts_sqflite_common:
     path: ../../vts_sqflite_common
   sqflite_common_test:
