@@ -1,4 +1,4 @@
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
 import 'package:test/test.dart';
 
 import 'src/core_import.dart';

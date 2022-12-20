@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 import 'package:path/path.dart' as p;
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_test/src/core_import.dart';
 import 'package:sqflite_common_test/src/sqflite_import.dart';
 import 'package:sqflite_common_test/src/test_scenario.dart';

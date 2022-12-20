@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:math';
 
-import 'package:sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common/utils/utils.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/utils/utils.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:sqflite_common_ffi_web/src/sw/constants.dart';
 import 'package:sqflite_common_ffi_web/src/web/load_sqlite_web.dart'

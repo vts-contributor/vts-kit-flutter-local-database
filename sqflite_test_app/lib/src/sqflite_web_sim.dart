@@ -1,5 +1,5 @@
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:sqflite/sqflite_dev.dart';
+import 'package:vts_sqflite/sqflite_dev.dart';
 
 import 'database_factory_web.dart';
 

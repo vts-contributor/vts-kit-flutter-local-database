@@ -1,4 +1,4 @@
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
 
 /// The database factory to use for ffi web. not supported on io
 DatabaseFactory get databaseFactoryFfiWeb => throw UnsupportedError(

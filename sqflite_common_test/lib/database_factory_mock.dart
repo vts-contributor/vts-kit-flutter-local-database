@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
 
 /// Bare minimum mock.
 class DatabaseFactoryMock implements DatabaseFactory {

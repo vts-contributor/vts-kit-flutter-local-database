@@ -38,8 +38,8 @@ Future<void> addDepOverrides(String appPath) async {
 dependency_overrides:
   sqflite:
     path: ../../../../sqflite
-  sqflite_common:
-    path: ../../../../sqflite_common
+  vts_sqflite_common:
+    path: ../../../../vts_sqflite_common
 ''';
 
   var pubspecFile = File(join(appPath, 'pubspec.yaml'));

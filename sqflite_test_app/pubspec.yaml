@@ -31,7 +31,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   path_provider:
-  sqflite_common:
+  vts_sqflite_common:
   dev_test:
   process_run: '>=0.11.0+2'
   path:
@@ -54,8 +54,8 @@ dev_dependencies:
 dependency_overrides:
   sqflite:
     path: ../sqflite
-  sqflite_common:
-    path: ../sqflite_common
+  vts_sqflite_common:
+    path: ../vts_sqflite_common
   sqflite_common_ffi:
     path: ../sqflite_common_ffi
   sqflite_common_ffi_web:

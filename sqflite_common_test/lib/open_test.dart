@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart';
-import 'package:sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common/utils/utils.dart' as utils;
+import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/utils/utils.dart' as utils;
 import 'package:synchronized/synchronized.dart';
 import 'package:test/test.dart';
 
 import 'src/core_import.dart';
 
-export 'package:sqflite_common/sqflite_dev.dart';
+export 'package:vts_sqflite_common/sqflite_dev.dart';
 
 /// Verify a condition in a test.
 bool verify(bool condition, [String? message]) {

@@ -16,7 +16,7 @@ Future main() async {
   final nnbdEnabled = dartVersion > Version(2, 12, 0, pre: '0');
   if (nnbdEnabled) {
     for (var dir in [
-      'sqflite_common',
+      'vts_sqflite_common',
       'sqflite_common_ffi',
       'sqflite_common_test',
     ]) {

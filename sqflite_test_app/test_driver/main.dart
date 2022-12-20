@@ -1,7 +1,7 @@
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:vts_sqflite/sqflite.dart';
+import 'package:vts_sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_test/all_test.dart' as all;
 import 'package:sqflite_common_test/sqflite_test.dart';
 import 'package:sqflite_example/src/common_import.dart';

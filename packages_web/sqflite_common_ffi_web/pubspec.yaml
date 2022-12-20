@@ -11,7 +11,7 @@ environment:
 dependencies:
   path: '>=1.7.0 <3.0.0'
   sqflite_common_ffi: '>=2.2.0-dev.6 <4.0.0'
-  sqflite_common: '>=2.4.0-dev.5 <4.0.0'
+  vts_sqflite_common: '>=2.4.0-dev.5 <4.0.0'
   sqlite3: '>=1.9.0 <3.0.0'
   http: '>=0.13.4 <2.0.0'
   js: '>=0.6.4 <2.0.0'
@@ -31,8 +31,8 @@ dev_dependencies:
 # dependency_overrides:
 #  sqflite_common_ffi:
 #    path: ../../sqflite_common_ffi
-#  sqflite_common:
-#    path: ../../sqflite_common
+#  vts_sqflite_common:
+#    path: ../../vts_sqflite_common
 
 executables:
   setup:

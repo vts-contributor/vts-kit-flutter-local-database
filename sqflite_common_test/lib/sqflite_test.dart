@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path/path.dart' as path;
-import 'package:sqflite_common/sqflite_dev.dart';
-import 'package:sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common/src/env_utils.dart'; // ignore: implementation_imports
+import 'package:vts_sqflite_common/sqflite_dev.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/src/env_utils.dart'; // ignore: implementation_imports
 
 /// Test context for testing
 abstract class SqfliteTestContext {

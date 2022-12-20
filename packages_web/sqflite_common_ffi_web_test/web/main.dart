@@ -1,5 +1,5 @@
-import 'package:sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common/utils/utils.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/utils/utils.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import 'ui.dart';

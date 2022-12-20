@@ -4,10 +4,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:sqflite_common/sqflite_dev.dart';
-import 'package:sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common/utils/utils.dart';
-import 'package:sqflite_common/utils/utils.dart' as utils;
+import 'package:vts_sqflite_common/sqflite_dev.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/utils/utils.dart';
+import 'package:vts_sqflite_common/utils/utils.dart' as utils;
 import 'package:sqflite_common_test/sqflite_test.dart';
 import 'package:test/test.dart';
 

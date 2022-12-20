@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
-import 'package:sqflite_common_ffi/src/windows/setup.dart';
+import 'package:vts_sqflite_common_ffi/src/windows/setup.dart';
 
 Future<void> main() async {
   test('buildWindows', () async {

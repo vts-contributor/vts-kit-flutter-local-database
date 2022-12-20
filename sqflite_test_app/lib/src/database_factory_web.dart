@@ -1,8 +1,8 @@
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:vts_sqflite_common/sqlite_api.dart';
 // ignore: implementation_imports
-import 'package:sqflite_common/src/method_call.dart';
+import 'package:vts_sqflite_common/src/method_call.dart';
 // ignore: implementation_imports
-import 'package:sqflite_common/src/mixin/import_mixin.dart';
+import 'package:vts_sqflite_common/src/mixin/import_mixin.dart';
 
 // ignore_for_file: avoid_print
 

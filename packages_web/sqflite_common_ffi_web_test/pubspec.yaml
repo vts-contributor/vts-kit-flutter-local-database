@@ -10,7 +10,7 @@ dependencies:
   path: ^1.7.0
   sqflite_common_ffi_web:
   sqflite_common_ffi:
-  sqflite_common:
+  vts_sqflite_common:
   sqflite_common_test:
     path: ../../sqflite_common_test
 dev_dependencies:
@@ -24,8 +24,8 @@ dependency_overrides:
     path: ../sqflite_common_ffi_web
   sqflite_common_ffi:
     path: ../../sqflite_common_ffi
-  sqflite_common:
-    path: ../../sqflite_common
+  vts_sqflite_common:
+    path: ../../vts_sqflite_common
   sqflite_common_test:
     path: ../../sqflite_common_test
 
