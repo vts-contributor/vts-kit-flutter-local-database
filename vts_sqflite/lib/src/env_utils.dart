@@ -1,1 +1,1 @@
-export 'package:vts_sqflite_common/src/env_utils.dart';
+export 'package:sqflite_common/src/env_utils.dart';

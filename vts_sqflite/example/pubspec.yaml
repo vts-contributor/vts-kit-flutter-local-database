@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   vts_sqflite:
-  vts_sqflite_common:
+  sqflite_common: '>=2.4.0+2 <4.0.0'
   synchronized:
   matcher:
   meta:
@@ -49,5 +49,3 @@ flutter:
 dependency_overrides:
   vts_sqflite:
     path: ../../vts_sqflite
-  vts_sqflite_common:
-    path: ../../vts_sqflite_common

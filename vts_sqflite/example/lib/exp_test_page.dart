@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:vts_sqflite/sqflite.dart';
-import 'package:vts_sqflite_common/sqflite_dev.dart';
+import 'package:sqflite_common/sqflite_dev.dart';
 import 'package:sqflite_example/src/common_import.dart';
 import 'package:sqflite_example/utils.dart';
 

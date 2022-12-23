@@ -90,7 +90,7 @@ This would lead to an empty result on Android. Native implementation can not han
 The solution is to use the [`hex()` SQLite function](https://sqlite.org/lang_corefunc.html#hex).
 
 ```dart
-import 'package:vts_sqflite_common/utils/utils.dart' as utils;
+import 'package:sqflite_common/utils/utils.dart' as utils;
 
 result = await db.query('test', where: 'hex(id) = ?', whereArgs: [utils.hex(id)]);
 ```

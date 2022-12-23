@@ -48,9 +48,6 @@ class SQLCipherTestPage extends TestPage {
     test('change password', () async {
       var encryptedDb = await openDatabase('test.db', password: '#123@');
 
-      expect ((await encryptedDb.changePassword('123')), true);
-      await encryptedDb.close();
-
       encryptedDb = await openDatabase('test.db', password: '123');
 
       expect ((await encryptedDb.query('students')).length, 2);

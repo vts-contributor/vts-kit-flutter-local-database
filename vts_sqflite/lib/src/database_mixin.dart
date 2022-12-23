@@ -1,1 +1,1 @@
-export 'package:vts_sqflite_common/src/database_mixin.dart';
+export 'package:sqflite_common/src/database_mixin.dart';

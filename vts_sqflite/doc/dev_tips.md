@@ -10,7 +10,7 @@ Here are some debugging tips when you encounter issues:
 Temporarily turn on SQL logging on the console by adding the following call in your code before opening the first database
 
 ````dart
-import 'package:vts_sqflite_common/sqflite_dev.dart';
+import 'package:sqflite_common/sqflite_dev.dart';
 import 'package:vts_sqflite/sqflite.dart';
 
 Future<void> main() async {
@@ -55,7 +55,7 @@ dev_dependencies:
 ```
 
 ```dart
-import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 import 'package:vts_sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:test/test.dart';
 

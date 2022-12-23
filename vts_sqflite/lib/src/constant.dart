@@ -1,1 +1,1 @@
-export 'package:vts_sqflite_common/src/constant.dart';
+export 'package:sqflite_common/src/constant.dart';

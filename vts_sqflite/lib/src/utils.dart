@@ -1,1 +1,1 @@
-export 'package:vts_sqflite_common/src/utils.dart';
+export 'package:sqflite_common/src/utils.dart';

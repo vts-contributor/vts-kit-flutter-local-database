@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:vts_sqflite/src/factory.dart';
 import 'package:vts_sqflite/src/factory_impl.dart';
-import 'package:vts_sqflite_common/sqlite_api.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 
 export 'package:vts_sqflite/src/factory_impl.dart'
     show sqfliteDatabaseFactoryDefault;

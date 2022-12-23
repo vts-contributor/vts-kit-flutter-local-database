@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:vts_sqflite/cipher_overrides/sqlite_api.dart';
 import 'package:vts_sqflite/sqflite.dart';
 // ignore: implementation_imports
 import 'package:vts_sqflite/src/factory_mixin.dart' as impl;
@@ -283,9 +284,9 @@ class _SimpleDbTestPageState extends State<SimpleDbTestPage> {
   Future<Database> _openDatabase() async {
     // await Sqflite.devSetOptions(SqfliteOptions(logLevel: sqfliteLogLevelVerbose));
     return database ??= await databaseFactory.openDatabase(widget.dbName,
-        password: 'database-password',
-        options: OpenDatabaseOptions(
+        options: CipherOpenDatabaseOptions(
             version: 1,
+            password: 'database-password',
             onCreate: (db, version) async {
               await db.execute('CREATE TABLE Test (value TEXT)');
             }));

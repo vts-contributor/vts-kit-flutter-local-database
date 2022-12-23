@@ -1,5 +1,0 @@
-# Prevent concurrent issue
-concurrency: 1
-platforms:
-  - chrome
-  - vm

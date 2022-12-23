@@ -1,1 +1,1 @@
-export 'package:vts_sqflite_common/sqlite_api.dart';
+export 'package:sqflite_common/sqlite_api.dart';

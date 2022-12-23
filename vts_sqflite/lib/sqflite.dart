@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:vts_sqflite/cipher_overrides/sqlite_api.dart';
 import 'package:vts_sqflite/src/compat.dart';
 import 'package:vts_sqflite/src/constant.dart';
-import 'package:vts_sqflite/src/factory_impl.dart' show databaseFactory;
+import 'package:vts_sqflite/src/factory_impl_cipher.dart' show databaseFactory;
 import 'package:vts_sqflite/src/sqflite_impl.dart';
 import 'package:vts_sqflite/src/utils.dart' as impl;
 import 'package:vts_sqflite/utils/utils.dart' as utils;
@@ -136,24 +137,39 @@ Future<Database> openDatabase(String path,
     bool singleInstance = true,
       String? password,
     }) {
-  final options = OpenDatabaseOptions(
-      version: version,
-      onConfigure: onConfigure,
-      onCreate: onCreate,
-      onUpgrade: onUpgrade,
-      onDowngrade: onDowngrade,
-      onOpen: onOpen,
-      readOnly: readOnly,
-      singleInstance: singleInstance,
-  );
-  return databaseFactory.openDatabase(path, password: password, options: options);
+  OpenDatabaseOptions options;
+  if (password != null && password.isNotEmpty) {
+    options = CipherOpenDatabaseOptions(
+        version: version,
+        onConfigure: onConfigure,
+        onCreate: onCreate,
+        onUpgrade: onUpgrade,
+        onDowngrade: onDowngrade,
+        onOpen: onOpen,
+        readOnly: readOnly,
+        singleInstance: singleInstance,
+      password: password
+    );
+  } else {
+    options = OpenDatabaseOptions(
+        version: version,
+        onConfigure: onConfigure,
+        onCreate: onCreate,
+        onUpgrade: onUpgrade,
+        onDowngrade: onDowngrade,
+        onOpen: onOpen,
+        readOnly: readOnly,
+        singleInstance: singleInstance);
+  }
+
+  return databaseFactory.openDatabase(path, options: options);
 }
 
 ///
 /// Open the database at a given path in read only mode
 ///
-Future<Database> openReadOnlyDatabase(String path, [String? password]) =>
-    openDatabase(path, readOnly: true, password: password);
+Future<Database> openReadOnlyDatabase(String path) =>
+    openDatabase(path, readOnly: true);
 
 ///
 /// Get the default databases location.
@@ -182,15 +198,14 @@ Future<bool> databaseExists(String path) =>
     databaseFactory.databaseExists(path);
 
 ///
-/// Encrypt an existed database using SQLCipher
+/// encrypt plaint text database
 ///
-Future<bool> encryptDatabase(String path, String password) {
-  return databaseFactory.encryptDatabase(path, password);
-}
+Future<bool> encryptDatabase(String path, String password) =>
+    databaseFactory.encryptDatabase(path, password);
 
 ///
-/// Decrypt an existed database using SQLCipher
+/// encrypt plaint text database
 ///
-Future<bool> decryptDatabase(String path, String password) {
-  return databaseFactory.decryptDatabase(path, password);
-}
+Future<bool> decryptDatabase(String path, String password) =>
+    databaseFactory.decryptDatabase(path, password);
+

@@ -1,2 +1,0 @@
-# Prevent concurrent issue between ffi and non ffi
-concurrency: 1
