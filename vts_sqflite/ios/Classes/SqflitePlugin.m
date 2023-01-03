@@ -611,59 +611,93 @@ static NSInteger _databaseOpenCount = 0;
         return;
     }
 
-    if ([password length] != 0) {
-            [queue inDatabase:^(FMDatabase *db) {
-                if ([db setKey:password] == NO) {
-                    result([FlutterError errorWithCode:SqliteErrorCode
-                                                   message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
-                                                   details:nil]);
-                    return;
-                }
-                // SELECT count(*) FROM sqlite_master;
-            }];
-        }
-
     // First call will be to prepare the database.
     // We turn on extended result code, allowing failure
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [queue inDatabase:^(FMDatabase *db) {
             sqlite3_extended_result_codes(db.sqliteHandle, 1);
+            
+            if ([password length] != 0) {
+                if ([db setKey:password] == NO || [db executeQuery:@"SELECT count(*) FROM sqlite_master"] == nil) {
+                    result([FlutterError errorWithCode:SqliteErrorCode
+                                                   message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
+                                                   details:nil]);
+                    return;
+                }
+            }
+            
+            //check if database was opened successfully
+            if ([db executeQuery:@"SELECT count(*) FROM sqlite_master"] == nil) {
+                result([FlutterError errorWithCode:SqliteErrorCode
+                                               message:[NSString stringWithFormat:@"%@ %@ with password: %@", @"wrong password for", path, password]
+                                               details:nil]);
+                return;
+            }
+            
+            NSNumber* databaseId;
+            @synchronized (self.mapLock) {
+                SqfliteDatabase* database = [SqfliteDatabase new];
+                databaseId = [NSNumber numberWithInteger:++_lastDatabaseId];
+                database.inTransaction = false;
+                database.fmDatabaseQueue = queue;
+                database.singleInstance = singleInstance;
+                database.databaseId = databaseId;
+                database.path = path;
+                database.logLevel = logLevel;
+                self.databaseMap[databaseId] = database;
+                // To handle hot-restart recovery
+                if (singleInstance) {
+                    self.singleInstanceDatabaseMap[path] = database;
+                }
+                if (_databaseOpenCount++ == 0) {
+                    if (sqfliteHasVerboseLogLevel(logLevel)) {
+                        NSLog(@"Creating operation queue");
+                    }
+                }
+            }
+
+            result([SqflitePlugin makeOpenResult: databaseId recovered:false recoveredInTransaction:false]);
         }];
     });
+}
 
-    NSNumber* databaseId;
-    @synchronized (self.mapLock) {
-        SqfliteDatabase* database = [SqfliteDatabase new];
-        databaseId = [NSNumber numberWithInteger:++_lastDatabaseId];
-        database.inTransaction = false;
-        database.fmDatabaseQueue = queue;
-        database.singleInstance = singleInstance;
-        database.databaseId = databaseId;
-        database.path = path;
-        database.logLevel = logLevel;
-        self.databaseMap[databaseId] = database;
-        // To handle hot-restart recovery
-        if (singleInstance) {
-            self.singleInstanceDatabaseMap[path] = database;
-        }
-        if (_databaseOpenCount++ == 0) {
-            if (sqfliteHasVerboseLogLevel(logLevel)) {
-                NSLog(@"Creating operation queue");
-            }
-        }
+- (void)handleDecryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    NSString* path = call.arguments[_paramPath];
+    NSString* password = call.arguments[_paramPassword];
+    
+    if ([password length] == 0 || [path length] == 0) {
+        result([FlutterError errorWithCode:SqliteErrorCode
+                                   message:[NSString stringWithFormat:@"%@ %@ with password: %@", @"invalid arguments:", path, password]
+                                   details:nil]);
+        return;
     }
+    
+    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:path flags:(SQLITE_OPEN_READWRITE)];
 
-    result([SqflitePlugin makeOpenResult: databaseId recovered:false recoveredInTransaction:false]);
+    bool success = queue != nil;
+
+    if (!success) {
+        NSLog(@"Could not open db.");
+        result([FlutterError errorWithCode:SqliteErrorCode
+                                   message:[NSString stringWithFormat:@"%@ %@", _errorOpenFailed, path]
+                                   details:nil]);
+        return;
+    }
+    
+    [queue inDatabase:^(FMDatabase *db) {
+        if ([db setKey:password] == NO) {
+            result([FlutterError errorWithCode:SqliteErrorCode
+                                           message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
+                                           details:nil]);
+            return;
+        } else {
+            
+            [db executeQuery:@"SELECT count(*) FROM sqlite_master;"];
+        }
+    }];
 }
 
 - (void)handleEncryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    [self handleEncryptOrDecryptDatabaseCall:call result:result encrypt:YES];
-}
-- (void)handleDecryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    [self handleEncryptOrDecryptDatabaseCall:call result:result encrypt:NO];
-}
-
-- (void)handleEncryptOrDecryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result encrypt:(BOOL)encrypt {
     NSString* path = call.arguments[_paramPath];
     NSString* password = call.arguments[_paramPassword];
 
@@ -747,7 +781,7 @@ static NSInteger _databaseOpenCount = 0;
     }
 
     if (sqfliteHasSqlLogLevel(database.logLevel)) {
-        NSLog(@"closing %@", database.path);
+        NSLog(@"closing %@", database.path);	
     }
     [self closeDatabase:database callback:^(){
         // We are in a background thread here.
