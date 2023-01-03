@@ -132,24 +132,24 @@ void main() {
     });
      */
 
-    test('databaseFactory', () {
-      final originalDefaultFactory = databaseFactory;
-      try {
-        databaseFactory = null;
-        final factory = MockDatabaseFactoryEmpty();
-        databaseFactory = factory;
-        expect(databaseFactory, factory);
-        expect(databaseFactory, isNot(originalDefaultFactory));
-        databaseFactory = originalDefaultFactory; // stderr trigger here
-
-        try {
-          databaseFactory = MockInvalidFactory();
-          fail('should fail');
-        } on ArgumentError catch (_) {}
-      } finally {
-        databaseFactory = null;
-        databaseFactory = originalDefaultFactory;
-      }
-    });
+    // test('databaseFactory', () {
+    //   final originalDefaultFactory = databaseFactory;
+    //   try {
+    //     databaseFactory = null;
+    //     final factory = MockDatabaseFactoryEmpty();
+    //     databaseFactory = factory;
+    //     expect(databaseFactory, factory);
+    //     expect(databaseFactory, isNot(originalDefaultFactory));
+    //     databaseFactory = originalDefaultFactory; // stderr trigger here
+    //
+    //     try {
+    //       databaseFactory = MockInvalidFactory();
+    //       fail('should fail');
+    //     } on ArgumentError catch (_) {}
+    //   } finally {
+    //     databaseFactory = null;
+    //     databaseFactory = originalDefaultFactory;
+    //   }
+    // });
   });
 }

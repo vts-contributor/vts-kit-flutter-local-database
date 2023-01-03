@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:vts_sqflite/cipher_overrides/sqlite_api.dart';
 import 'package:vts_sqflite/sqflite.dart';
 // ignore: implementation_imports
-import 'package:vts_sqflite/src/factory_mixin.dart' as impl;
+import 'package:vts_sqflite/src/factory_impl_cipher.dart' as impl;
 import 'package:vts_sqflite/utils/utils.dart';
 import 'package:sqflite_example/src/item_widget.dart';
 import 'package:sqflite_example/utils.dart';
@@ -36,7 +36,7 @@ class _ManualTestPageState extends State<ManualTestPage> {
   }
 
   Future<Database> _openDatabase() async {
-    return database ??= await databaseFactory.openDatabase(dbName);
+    return database ??= await impl.databaseFactory.openDatabase(dbName);
   }
 
   Future _closeDatabase() async {
@@ -149,7 +149,7 @@ class _ManualTestPageState extends State<ManualTestPage> {
             SqfliteOptions(logLevel: sqfliteLogLevelVerbose));
       }, summary: 'Verbose logs, for debugging'),
       SqfMenuItem('Get info', () async {
-        final factory = databaseFactory as impl.SqfliteDatabaseFactoryMixin;
+        final factory = databaseFactory as impl.CipherSqfliteDatabaseFactoryImpl;
         final info = await factory.getDebugInfo();
         print(info.toString());
       }, summary: 'Implementation info (dev only)'),

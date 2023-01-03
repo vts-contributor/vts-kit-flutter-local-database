@@ -12,7 +12,7 @@ import 'sqlite_api.dart';
 
 export 'package:vts_sqflite/sql.dart' show ConflictAlgorithm;
 export 'package:vts_sqflite/src/compat.dart';
-export 'package:vts_sqflite/src/factory_impl.dart' show databaseFactory;
+export 'package:vts_sqflite/src/factory_impl_cipher.dart' show databaseFactory;
 
 export 'sqlite_api.dart';
 
