@@ -353,11 +353,6 @@ More information on supported types [here](https://github.com/tekartik/sqflite/b
 
 ## SQLCipher Guide
 
-Import:
-```dart
-import 'package:vts_sqflite/sqflite.dart';
-```
-
 We support new password argument for opening databases.
 ```dart
 Database database = await openDatabase('test.db', password: '@123sas3559');
