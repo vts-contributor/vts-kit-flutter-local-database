@@ -56,16 +56,16 @@ class SQLCipherTestPage extends TestPage {
       expect ((await encryptedDb.query('students')).length, 2);
       await encryptedDb.close();
     });
-    //
-    // test('change password', () async {
-    //   var encryptedDb = await openDatabase('test.db', password: '#123@');
-    //
-    //   encryptedDb = await openDatabase('test.db', password: '123');
-    //
-    //   expect ((await encryptedDb.query('students')).length, 2);
-    //   await encryptedDb.close();
-    // });
-    //
+
+    test('change password', () async {
+      var encryptedDb = await openDatabase('test.db', password: '#123@');
+
+      encryptedDb = await openDatabase('test.db', password: '123');
+
+      expect ((await encryptedDb.query('students')).length, 2);
+      await encryptedDb.close();
+    });
+
     test('decrypt database', () async {
       await deleteDatabase('test.db');
       var tempDb = await openDatabase('test.db', password: '#123@');

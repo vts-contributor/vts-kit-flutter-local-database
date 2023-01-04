@@ -63,6 +63,7 @@ NSString *const SqfliteMethodExecute = @"execute";
 NSString *const SqfliteMethodInsert = @"insert";
 NSString *const SqfliteMethodUpdate = @"update";
 NSString *const SqfliteMethodQuery = @"query";
+NSString *const SqfliteMethodChangePassword = @"changePassword";
 
 NSString *const SqliteErrorCode = @"sqlite_error";
 NSString *const SqfliteErrorBadParam = @"bad_param"; // internal only
@@ -460,6 +461,18 @@ static NSInteger _databaseOpenCount = 0;
     }];
 
 }
+
+- (void)handleChangePasswordCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    SqfliteDatabase* database = [self getDatabaseOrError:call result:result];
+    if (database == nil) {
+        return;
+    }
+    [database inDatabase:^(FMDatabase *db) {
+        result(@([db rekey:call.arguments[_paramPassword]]));
+    }];
+
+}
+
 
 
 - (void)handleQueryCursorNextCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -1016,6 +1029,8 @@ static NSInteger _databaseOpenCount = 0;
         [self handleBatchCall:call result:result];
     } else if ([_methodQueryCursorNext isEqualToString:call.method]) {
         [self handleQueryCursorNextCall:call result:result];
+    } else if ([SqfliteMethodChangePassword isEqualToString:call.method]) {
+        [self handleChangePasswordCall:call result:result];
     } else if ([_methodGetDatabasesPath isEqualToString:call.method]) {
         [self handleGetDatabasesPath:call result:result];
     } else if ([_methodCloseDatabase isEqualToString:call.method]) {
