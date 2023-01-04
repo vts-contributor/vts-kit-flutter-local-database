@@ -63,6 +63,7 @@ NSString *const SqfliteMethodExecute = @"execute";
 NSString *const SqfliteMethodInsert = @"insert";
 NSString *const SqfliteMethodUpdate = @"update";
 NSString *const SqfliteMethodQuery = @"query";
+NSString *const SqfliteMethodChangePassword = @"changePassword";
 
 NSString *const SqliteErrorCode = @"sqlite_error";
 NSString *const SqfliteErrorBadParam = @"bad_param"; // internal only
@@ -461,6 +462,18 @@ static NSInteger _databaseOpenCount = 0;
 
 }
 
+- (void)handleChangePasswordCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    SqfliteDatabase* database = [self getDatabaseOrError:call result:result];
+    if (database == nil) {
+        return;
+    }
+    [database inDatabase:^(FMDatabase *db) {
+        result(@([db rekey:call.arguments[_paramPassword]]));
+    }];
+
+}
+
+
 
 - (void)handleQueryCursorNextCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     SqfliteDatabase* database = [self getDatabaseOrError:call result:result];
@@ -611,59 +624,133 @@ static NSInteger _databaseOpenCount = 0;
         return;
     }
 
-    if ([password length] != 0) {
-            [queue inDatabase:^(FMDatabase *db) {
-                if ([db setKey:password] == NO) {
-                    result([FlutterError errorWithCode:SqliteErrorCode
-                                                   message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
-                                                   details:nil]);
-                    return;
-                }
-                // SELECT count(*) FROM sqlite_master;
-            }];
-        }
-
     // First call will be to prepare the database.
     // We turn on extended result code, allowing failure
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [queue inDatabase:^(FMDatabase *db) {
             sqlite3_extended_result_codes(db.sqliteHandle, 1);
+            
+            if ([password length] != 0) {
+                if ([db setKey:password] == NO || [db executeQuery:@"SELECT count(*) FROM sqlite_master"] == nil) {
+                    result([FlutterError errorWithCode:SqliteErrorCode
+                                                   message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
+                                                   details:nil]);
+                    return;
+                }
+            }
+            
+            //check if database was opened successfully
+            if ([db executeQuery:@"SELECT count(*) FROM sqlite_master"] == nil) {
+                result([FlutterError errorWithCode:SqliteErrorCode
+                                               message:[NSString stringWithFormat:@"%@ %@ with password: %@", @"wrong password for", path, password]
+                                               details:nil]);
+                return;
+            }
+            
+            NSNumber* databaseId;
+            @synchronized (self.mapLock) {
+                SqfliteDatabase* database = [SqfliteDatabase new];
+                databaseId = [NSNumber numberWithInteger:++_lastDatabaseId];
+                database.inTransaction = false;
+                database.fmDatabaseQueue = queue;
+                database.singleInstance = singleInstance;
+                database.databaseId = databaseId;
+                database.path = path;
+                database.logLevel = logLevel;
+                self.databaseMap[databaseId] = database;
+                // To handle hot-restart recovery
+                if (singleInstance) {
+                    self.singleInstanceDatabaseMap[path] = database;
+                }
+                if (_databaseOpenCount++ == 0) {
+                    if (sqfliteHasVerboseLogLevel(logLevel)) {
+                        NSLog(@"Creating operation queue");
+                    }
+                }
+            }
+
+            result([SqflitePlugin makeOpenResult: databaseId recovered:false recoveredInTransaction:false]);
         }];
     });
+}
 
-    NSNumber* databaseId;
-    @synchronized (self.mapLock) {
-        SqfliteDatabase* database = [SqfliteDatabase new];
-        databaseId = [NSNumber numberWithInteger:++_lastDatabaseId];
-        database.inTransaction = false;
-        database.fmDatabaseQueue = queue;
-        database.singleInstance = singleInstance;
-        database.databaseId = databaseId;
-        database.path = path;
-        database.logLevel = logLevel;
-        self.databaseMap[databaseId] = database;
-        // To handle hot-restart recovery
-        if (singleInstance) {
-            self.singleInstanceDatabaseMap[path] = database;
-        }
-        if (_databaseOpenCount++ == 0) {
-            if (sqfliteHasVerboseLogLevel(logLevel)) {
-                NSLog(@"Creating operation queue");
-            }
-        }
+- (void)handleDecryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    NSString* path = call.arguments[_paramPath];
+    NSString* password = call.arguments[_paramPassword];
+    
+    if ([password length] == 0 || [path length] == 0) {
+        result([FlutterError errorWithCode:SqliteErrorCode
+                                   message:[NSString stringWithFormat:@"%@ %@ with password: %@", @"invalid arguments:", path, password]
+                                   details:nil]);
+        return;
     }
+    
+    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:path flags:(SQLITE_OPEN_READWRITE)];
 
-    result([SqflitePlugin makeOpenResult: databaseId recovered:false recoveredInTransaction:false]);
+    bool success = queue != nil;
+
+    if (!success) {
+        NSLog(@"Could not open db.");
+        result([FlutterError errorWithCode:SqliteErrorCode
+                                   message:[NSString stringWithFormat:@"%@ %@", _errorOpenFailed, path]
+                                   details:nil]);
+        return;
+    }
+    
+    [queue inDatabase:^(FMDatabase *db) {
+        if ([db setKey:password] == NO || [db executeQuery:@"SELECT count(*) FROM sqlite_master;"] == nil) {
+            result([FlutterError errorWithCode:SqliteErrorCode
+                                           message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
+                                           details:nil]);
+            return;
+        } else {
+            NSArray *components = [path pathComponents];
+            NSString *dir =
+                [NSString pathWithComponents:
+                    [components subarrayWithRange:(NSRange){ 0, components.count - 1}]];
+            
+            NSString *unencryptedDB = [self getTemporaryDatabasePath:dir];
+            
+            [[NSFileManager defaultManager] createFileAtPath:unencryptedDB
+                                            contents:nil
+                                            attributes:nil];
+            
+            NSString *sqlQ = [NSString stringWithFormat:@"ATTACH DATABASE '%@' AS plain KEY '';", unencryptedDB];
+            
+            [db executeStatements:sqlQ];
+            
+            [db executeStatements:@"SELECT sqlcipher_export('plain');"];
+            
+            [db executeStatements:@"DETACH DATABASE plain;"];
+            
+            [db close];
+            
+//            result(@(YES));
+//            return;
+            
+            if ([self replaceFile:path with:unencryptedDB]) {
+                result(@(YES));
+                return;
+            }
+            
+            result([FlutterError errorWithCode:SqliteErrorCode
+                  message:[NSString stringWithFormat:@"%@ %@ with password: %@",_errorEncryptFailed, path, password]
+                  details:nil]);
+        }
+    }];
+}
+
+- (NSString*)getTemporaryString {
+    NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
+    return [NSString stringWithFormat:@"%f", today];
+}
+
+- (NSString*)getTemporaryDatabasePath:(NSString*) dir {
+    return [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", [self getTemporaryString], @".db"]];
 }
 
 - (void)handleEncryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    [self handleEncryptOrDecryptDatabaseCall:call result:result encrypt:YES];
-}
-- (void)handleDecryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    [self handleEncryptOrDecryptDatabaseCall:call result:result encrypt:NO];
-}
 
-- (void)handleEncryptOrDecryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result encrypt:(BOOL)encrypt {
     NSString* path = call.arguments[_paramPath];
     NSString* password = call.arguments[_paramPassword];
 
@@ -671,12 +758,11 @@ static NSInteger _databaseOpenCount = 0;
     NSString *dir =
         [NSString pathWithComponents:
             [components subarrayWithRange:(NSRange){ 0, components.count - 1}]];
-    NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
-    NSString *intervalString = [NSString stringWithFormat:@"%f%@", today, @".db"];
-    NSString *ecDB = [dir stringByAppendingPathComponent:intervalString];
+    
+    NSString *encryptedDB = [self getTemporaryDatabasePath:dir];
 
     // SQL Query. NOTE THAT DATABASE IS THE FULL PATH NOT ONLY THE NAME
-    const char* sqlQ = [[NSString stringWithFormat:@"ATTACH DATABASE '%@' AS encrypted KEY '%@';", ecDB, password] UTF8String];
+    const char* sqlQ = [[NSString stringWithFormat:@"ATTACH DATABASE '%@' AS encrypted KEY '%@';", encryptedDB, password] UTF8String];
 
     sqlite3 *unencrypted_DB;
     if (sqlite3_open([path UTF8String], &unencrypted_DB) == SQLITE_OK) {
@@ -692,7 +778,7 @@ static NSInteger _databaseOpenCount = 0;
 
         sqlite3_close(unencrypted_DB);
 
-        if ([self replaceFile:path with:ecDB]) {
+        if ([self replaceFile:path with:encryptedDB]) {
             result(@(YES));
             return;
         }
@@ -736,6 +822,12 @@ static NSInteger _databaseOpenCount = 0;
     return YES;
 }
 
+- (BOOL)fileExisted:(NSString*)path {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    return [fileManager fileExistsAtPath:path];
+}
+
 
 //
 // close
@@ -747,7 +839,7 @@ static NSInteger _databaseOpenCount = 0;
     }
 
     if (sqfliteHasSqlLogLevel(database.logLevel)) {
-        NSLog(@"closing %@", database.path);
+        NSLog(@"closing %@", database.path);	
     }
     [self closeDatabase:database callback:^(){
         // We are in a background thread here.
@@ -937,6 +1029,8 @@ static NSInteger _databaseOpenCount = 0;
         [self handleBatchCall:call result:result];
     } else if ([_methodQueryCursorNext isEqualToString:call.method]) {
         [self handleQueryCursorNextCall:call result:result];
+    } else if ([SqfliteMethodChangePassword isEqualToString:call.method]) {
+        [self handleChangePasswordCall:call result:result];
     } else if ([_methodGetDatabasesPath isEqualToString:call.method]) {
         [self handleGetDatabasesPath:call result:result];
     } else if ([_methodCloseDatabase isEqualToString:call.method]) {

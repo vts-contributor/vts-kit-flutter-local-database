@@ -1,3 +1,4 @@
+import 'package:sqflite_common/sqlite_api.dart';
 import 'package:vts_sqflite/cipher_overrides/constant.dart';
 import 'package:vts_sqflite/cipher_overrides/database_mixin.dart';
 import 'package:vts_sqflite/cipher_overrides/sqlite_api.dart';
@@ -31,4 +32,11 @@ mixin CipherSqfliteDatabaseFactoryMixin on SqfliteDatabaseFactoryMixin implement
     }) ?? false;
   }
 
+  @override
+  Future<bool> changePassword(Database database, String newPassword) async {
+    return await safeInvokeMethod<bool?>(methodChangePassword, {
+      paramId: (database as SqfliteDatabase).id,
+      paramPassword: newPassword,
+    }) ?? false;
+  }
 }

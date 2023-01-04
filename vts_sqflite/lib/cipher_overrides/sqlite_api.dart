@@ -7,6 +7,8 @@ abstract class CipherDatabaseFactory extends DatabaseFactory {
   Future<bool> encryptDatabase(String path, String password);
   ///decrypt a database
   Future<bool> decryptDatabase(String path, String password);
+  ///change a database password
+  Future<bool> changePassword(Database database, String newPassword);
 }
 
 ///add password to options
