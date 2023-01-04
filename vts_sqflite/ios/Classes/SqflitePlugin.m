@@ -685,19 +685,59 @@ static NSInteger _databaseOpenCount = 0;
     }
     
     [queue inDatabase:^(FMDatabase *db) {
-        if ([db setKey:password] == NO) {
+        if ([db setKey:password] == NO || [db executeQuery:@"SELECT count(*) FROM sqlite_master;"] == nil) {
             result([FlutterError errorWithCode:SqliteErrorCode
                                            message:[NSString stringWithFormat:@"%@ %@ with password: %@", _errorOpenSetKeyFailed, path, password]
                                            details:nil]);
             return;
         } else {
+            NSArray *components = [path pathComponents];
+            NSString *dir =
+                [NSString pathWithComponents:
+                    [components subarrayWithRange:(NSRange){ 0, components.count - 1}]];
             
-            [db executeQuery:@"SELECT count(*) FROM sqlite_master;"];
+            NSString *unencryptedDB = [self getTemporaryDatabasePath:dir];
+            
+            [[NSFileManager defaultManager] createFileAtPath:unencryptedDB
+                                            contents:nil
+                                            attributes:nil];
+            
+            NSString *sqlQ = [NSString stringWithFormat:@"ATTACH DATABASE '%@' AS plain KEY '';", unencryptedDB];
+            
+            [db executeStatements:sqlQ];
+            
+            [db executeStatements:@"SELECT sqlcipher_export('plain');"];
+            
+            [db executeStatements:@"DETACH DATABASE plain;"];
+            
+            [db close];
+            
+//            result(@(YES));
+//            return;
+            
+            if ([self replaceFile:path with:unencryptedDB]) {
+                result(@(YES));
+                return;
+            }
+            
+            result([FlutterError errorWithCode:SqliteErrorCode
+                  message:[NSString stringWithFormat:@"%@ %@ with password: %@",_errorEncryptFailed, path, password]
+                  details:nil]);
         }
     }];
 }
 
+- (NSString*)getTemporaryString {
+    NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
+    return [NSString stringWithFormat:@"%f", today];
+}
+
+- (NSString*)getTemporaryDatabasePath:(NSString*) dir {
+    return [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", [self getTemporaryString], @".db"]];
+}
+
 - (void)handleEncryptDatabaseCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+
     NSString* path = call.arguments[_paramPath];
     NSString* password = call.arguments[_paramPassword];
 
@@ -705,12 +745,11 @@ static NSInteger _databaseOpenCount = 0;
     NSString *dir =
         [NSString pathWithComponents:
             [components subarrayWithRange:(NSRange){ 0, components.count - 1}]];
-    NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
-    NSString *intervalString = [NSString stringWithFormat:@"%f%@", today, @".db"];
-    NSString *ecDB = [dir stringByAppendingPathComponent:intervalString];
+    
+    NSString *encryptedDB = [self getTemporaryDatabasePath:dir];
 
     // SQL Query. NOTE THAT DATABASE IS THE FULL PATH NOT ONLY THE NAME
-    const char* sqlQ = [[NSString stringWithFormat:@"ATTACH DATABASE '%@' AS encrypted KEY '%@';", ecDB, password] UTF8String];
+    const char* sqlQ = [[NSString stringWithFormat:@"ATTACH DATABASE '%@' AS encrypted KEY '%@';", encryptedDB, password] UTF8String];
 
     sqlite3 *unencrypted_DB;
     if (sqlite3_open([path UTF8String], &unencrypted_DB) == SQLITE_OK) {
@@ -726,7 +765,7 @@ static NSInteger _databaseOpenCount = 0;
 
         sqlite3_close(unencrypted_DB);
 
-        if ([self replaceFile:path with:ecDB]) {
+        if ([self replaceFile:path with:encryptedDB]) {
             result(@(YES));
             return;
         }
@@ -768,6 +807,12 @@ static NSInteger _databaseOpenCount = 0;
         return NO;
     }
     return YES;
+}
+
+- (BOOL)fileExisted:(NSString*)path {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    return [fileManager fileExistsAtPath:path];
 }
 
 
