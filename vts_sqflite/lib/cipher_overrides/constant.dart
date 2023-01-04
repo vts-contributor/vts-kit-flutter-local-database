@@ -6,3 +6,6 @@ const String methodEncryptDatabase = 'encryptDatabase';
 
 ///method decrypt database
 const String methodDecryptDatabase = 'decryptDatabase';
+
+///method change password
+const String methodChangePassword = 'changePassword';

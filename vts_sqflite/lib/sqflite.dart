@@ -209,3 +209,7 @@ Future<bool> encryptDatabase(String path, String password) =>
 Future<bool> decryptDatabase(String path, String password) =>
     databaseFactory.decryptDatabase(path, password);
 
+/// change database password
+Future<bool> changePassword(Database database, String newPassword) =>
+    databaseFactory.changePassword(database, newPassword);
+
