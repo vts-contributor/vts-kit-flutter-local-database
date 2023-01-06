@@ -1,2 +1,2 @@
 include:
-    - "vts_sqflite/.ci-cd.yaml"
+    - "vts_sqflite/.ci-cd.yml"
