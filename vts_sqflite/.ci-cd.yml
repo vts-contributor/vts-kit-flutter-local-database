@@ -47,7 +47,7 @@ variables:
 
 test:
   # extends: .android_docker_image
-  image: cirrusci/flutter:3.3.10
+  image: cirrusci/flutter:$FLUTTER_IMAGE_VER
   stage: test
   before_script:
     - cd $ROOT
