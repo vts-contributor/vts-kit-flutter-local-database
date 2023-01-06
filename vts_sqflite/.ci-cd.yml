@@ -11,8 +11,6 @@ variables:
   ROOT: vts_sqflite
 
 test:
-  variables:
-    CI_DEBUG_TRACE: "true"
   image: $FLUTTER_IMAGE
   stage: test
   before_script:
