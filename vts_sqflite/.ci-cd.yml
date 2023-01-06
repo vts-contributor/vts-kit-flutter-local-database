@@ -22,5 +22,5 @@ test:
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
     paths:
-      - coverage/*
+      - $ROOT/coverage/
     expire_in: 5 days
