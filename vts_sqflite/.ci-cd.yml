@@ -17,6 +17,8 @@ test:
     - cd $ROOT
   script:
     - flutter test --coverage
-    - genhtml lcov.info --output=coverage
+    - genhtml coverage/lcov.info --output=coverage
   artifacts:
+    paths:
+      - coverage/*
     expire_in: 5 days
