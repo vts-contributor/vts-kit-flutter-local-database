@@ -1,0 +1,2 @@
+include:
+    - "vts_sqflite/.ci-cd.yaml"
