@@ -5,14 +5,14 @@ stages:
   # - productive_deployment
   # - notification
 
-# variables:
-#   ROOT: vts_sqflite/example
+variables:
+  ROOT_DEMO: vts_sqflite/example
 
 .base:
   before_script:
-    - cd $ROOT
+    - cd $ROOT_DEMO
 
-test:
+test-demo:
   image: $FLUTTER_IMAGE
   stage: test-demo
   extends: .base
@@ -21,31 +21,31 @@ test:
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
     paths:
-      - $ROOT/coverage/
+      - $ROOT_DEMO/coverage/
     expire_in: 5 days
 
-# build_android:
-#   stage: package
-#   image: $FLUTTER_IMAGE
-#   extends: .base
-# #   extends: .android_key_store
-#   script: flutter build apk --release --build-number=$CI_PIPELINE_ID
-#   artifacts:
-#     paths:
-#       - $ROOT_DEMO/build/app/outputs/apk/release/app-release.apk
-#     expire_in: 1 day
+build_android_demo:
+  stage: package_demo
+  image: $FLUTTER_IMAGE
+  extends: .base
+#   extends: .android_key_store
+  script: flutter build apk --release --build-number=$CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - $ROOT_DEMO/build/app/outputs/apk/release/app-release.apk
+    expire_in: 1 day
 
-# build_ios:
-#   stage: package
-#   image: $FLUTTER_IMAGE
-#   extends: .base
-#   script:
-#     # although fastlane also is capable of building the ipa, we are doing it with flutter to ensure it has the same versioning like the Android app
-#     - flutter build ios --release --build-number=$CI_PIPELINE_ID
-#   artifacts:
-#     untracked: true
-#     expire_in: 1 day
-#   tags:
-#     - ios
-# #   only:
-# #     - master
+build_ios_demo:
+  stage: package_demo
+  image: $FLUTTER_IMAGE
+  extends: .base
+  script:
+    # although fastlane also is capable of building the ipa, we are doing it with flutter to ensure it has the same versioning like the Android app
+    - flutter build ios --release --build-number=$CI_PIPELINE_ID
+  artifacts:
+    untracked: true
+    expire_in: 1 day
+  tags:
+    - ios
+#   only:
+#     - master
