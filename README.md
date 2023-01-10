@@ -1,4 +1,4 @@
-# sqflite - sqlcipher fork
+# vts_sqflite - forked from Sqflite
 
 [![pub package](https://img.shields.io/pub/v/sqflite.svg)](https://pub.dev/packages/sqflite)
 [![Build Status](https://travis-ci.org/tekartik/sqflite.svg?branch=master)](https://travis-ci.org/tekartik/sqflite)

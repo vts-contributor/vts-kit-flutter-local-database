@@ -11,6 +11,7 @@ Supports iOS, Android and MacOS.
 * Automatic version managment during open
 * Helpers for insert/query/update/delete queries
 * DB operation executed in a background thread on iOS and Android
+* Add support for SQLCipher
 
 Other platforms support:
 * Linux/Windows/DartVM support using [sqflite_common_ffi](https://pub.dev/packages/sqflite_common_ffi)
@@ -348,6 +349,26 @@ More information on supported types [here](https://github.com/tekartik/sqflite/b
 ### BLOB
 
 * Dart type: `Uint8List`
+
+
+## SQLCipher Guide
+
+We support new password argument for opening databases.
+```dart
+Database database = await openDatabase('test.db', password: '@123sas3559');
+// you shouldn't hard code the password here, maybe hash it and store to shared preferences.
+```
+New functions:
+ ```dart
+ //encrypt a plain text database with new password
+await encryptDatabase('test.db', '@sdasfa');
+
+//decrypt an encrypted database, the password must be correct for the encrypted database
+await decryptDatabase('test.db', '@sdasfa');
+
+//change password
+await changePassword(database, 'djkl123');
+ ```
 
 ## Current issues
 
