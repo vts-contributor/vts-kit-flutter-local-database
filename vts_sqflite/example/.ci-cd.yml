@@ -1,6 +1,6 @@
 stages:
   - test
-  # - package
+  - package
   # - test_deployment
   # - productive_deployment
   # - notification
