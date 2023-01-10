@@ -40,7 +40,7 @@ buildTypes {
 	  minifyEnabled true   //this line
 	  shrinkResources true    //this line
 	  proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'   //this line
-	  signingConfig signingConfigs.release  
+	  signingConfig signingConfigs.debug  
    }  
   debug {  
 	  signingConfig signingConfigs.debug  
