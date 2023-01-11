@@ -12,6 +12,6 @@ public class ConstantTest {
 
     @Test
     public void key() {
-        assertEquals("com.tekartik.sqflite", Constant.PLUGIN_KEY);
+        assertEquals("com.viettel.vts_sqflite", Constant.PLUGIN_KEY);
     }
 }

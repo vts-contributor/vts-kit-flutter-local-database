@@ -35,7 +35,7 @@
         <!-- Uncomment to enable WAL (or unit test walEnabled that should fail then) -->
         <!--
         <meta-data
-            android:name="com.tekartik.sqflite.wal_enabled"
+            android:name="com.viettel.vts_sqflite.wal_enabled"
             android:value="true" />
         -->
     </application>

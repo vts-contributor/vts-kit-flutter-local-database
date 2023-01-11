@@ -103,7 +103,7 @@ following in you app manifest (in the application object):
   ...
   <!-- Enable WAL -->
   <meta-data
-    android:name="com.tekartik.sqflite.wal_enabled"
+    android:name="com.viettel.vts_sqflite.wal_enabled"
     android:value="true" />
   ...
 </application>

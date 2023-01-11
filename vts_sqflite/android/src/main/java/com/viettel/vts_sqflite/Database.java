@@ -58,7 +58,7 @@ class Database {
     // To turn on when supported fully
     // 2022-09-14 experiments show several corruption issue.
     final static boolean WAL_ENABLED_BY_DEFAULT = false;
-    private static final String WAL_ENABLED_META_NAME = "com.tekartik.sqflite.wal_enabled";
+    private static final String WAL_ENABLED_META_NAME = "com.viettel.vts_sqflite.wal_enabled";
     static private Boolean walGloballyEnabled;
     final boolean singleInstance;
     @NonNull
