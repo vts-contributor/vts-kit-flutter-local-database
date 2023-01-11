@@ -15,12 +15,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.tekartik.sqflite
-        pluginClass: SqflitePlugin
+        package: com.viettel.vts_sqflite
+        pluginClass: VtsSqflitePlugin
       ios:
-        pluginClass: SqflitePlugin
-      macos:
-        pluginClass: SqflitePlugin
+        pluginClass: VtsSqflitePlugin
 
 dependencies:
   flutter:
