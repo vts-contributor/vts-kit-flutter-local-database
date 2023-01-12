@@ -6,7 +6,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('sqflite', () {
-    const channel = MethodChannel('com.tekartik.sqflite');
+    const channel = MethodChannel('com.viettel.vts_sqflite');
 
     final log = <MethodCall>[];
     String? response;

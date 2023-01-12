@@ -5,7 +5,7 @@
 
 #import <sqlite3.h>
 
-static NSString *const _channelName = @"com.tekartik.sqflite";
+static NSString *const _channelName = @"com.viettel.vts_sqflite";
 static NSString *const _inMemoryPath = @":memory:";
 
 static NSString *const _methodGetPlatformVersion = @"getPlatformVersion";

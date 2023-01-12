@@ -5,7 +5,7 @@ Future<void> main() async {
 
   await shell.run('''
 
-adb uninstall com.tekartik.sqfliteexample
+adb uninstall com.viettel.vts_sqfliteexample
 
 ''');
 }

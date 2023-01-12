@@ -1,4 +1,4 @@
-group 'com.tekartik.sqflite'
+group 'com.viettel.vts_sqflite'
 version '1.0-SNAPSHOT'
 
 buildscript {
