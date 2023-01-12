@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SqfliteOperation.h"
-#import "SqflitePlugin.h"
+#import "VtsSqflitePlugin.h"
 #import "SqfliteFmdbImport.m"
 
 // Abstract
@@ -77,7 +77,7 @@
 
 - (NSArray*)getSqlArguments {
     NSArray* arguments = [dictionary objectForKey:SqfliteParamSqlArguments];
-    return [SqflitePlugin toSqlArguments:arguments];
+    return [VtsSqflitePlugin toSqlArguments:arguments];
 }
 
 - (bool)getNoResult {
@@ -167,7 +167,7 @@
 
 - (NSArray*)getSqlArguments {
     NSArray* arguments = flutterMethodCall.arguments[SqfliteParamSqlArguments];
-    return [SqflitePlugin toSqlArguments:arguments];
+    return [VtsSqflitePlugin toSqlArguments:arguments];
 }
 
 
