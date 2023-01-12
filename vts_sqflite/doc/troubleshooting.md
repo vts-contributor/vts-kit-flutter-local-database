@@ -59,7 +59,7 @@ Advanced checks:
   
   Android:
   ```java
-  SqflitePlugin.registerWith(registry.registrarFor("com.tekartik.sqflite.SqflitePlugin"));
+  SqflitePlugin.registerWith(registry.registrarFor("com.viettel.vts_sqflite.SqflitePlugin"));
   ```
   iOS:
   ```objective-c

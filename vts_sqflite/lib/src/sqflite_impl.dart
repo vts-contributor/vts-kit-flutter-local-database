@@ -3,7 +3,7 @@ import 'dart:core';
 import 'services_impl.dart';
 
 /// Sqflite channel name
-const String channelName = 'com.tekartik.sqflite';
+const String channelName = 'com.viettel.vts_sqflite';
 
 /// Sqflite channel
 const MethodChannel channel = MethodChannel(channelName);

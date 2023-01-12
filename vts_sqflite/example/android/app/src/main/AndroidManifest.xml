@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tekartik.sqfliteexample">
+    package="com.viettel.sqfliteexample">
 
     <application
         android:name="${applicationName}"
         tools:replace="android:label"
         android:label="example">
         <activity
-            android:name=".MainActivity"
+            android:name="com.viettel.sqfliteexample.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -35,7 +35,7 @@
         <!-- Uncomment to enable WAL (or unit test walEnabled that should fail then) -->
         <!--
         <meta-data
-            android:name="com.tekartik.sqflite.wal_enabled"
+            android:name="com.viettel.vts_sqflite.wal_enabled"
             android:value="true" />
         -->
     </application>
