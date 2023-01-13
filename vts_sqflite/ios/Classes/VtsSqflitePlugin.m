@@ -1,4 +1,4 @@
-#import "SqflitePlugin.h"
+#import "VtsSqflitePlugin.h"
 #import "SqfliteDatabase.h"
 #import "SqfliteOperation.h"
 #import "SqfliteFmdbImport.m"
@@ -90,7 +90,7 @@ NSString *const SqfliteSqlPragmaSqliteDefensiveOff = @"PRAGMA sqflite -- db_conf
 - (void)resultSetDidClose:(FMResultSet *)resultSet;
 @end
 
-@interface SqflitePlugin ()
+@interface VtsSqflitePlugin ()
 
 @property (atomic, retain) NSMutableDictionary<NSNumber*, SqfliteDatabase*>* databaseMap;
 @property (atomic, retain) NSMutableDictionary<NSString*, SqfliteDatabase*>* singleInstanceDatabaseMap;
@@ -115,7 +115,7 @@ bool sqfliteHasVerboseLogLevel(int logLevel) {
 //
 
 
-@implementation SqflitePlugin
+@implementation VtsSqflitePlugin
 
 @synthesize databaseMap;
 @synthesize mapLock;
@@ -143,7 +143,7 @@ static NSInteger _databaseOpenCount = 0;
                                      methodChannelWithName:_channelName
                                      binaryMessenger:[registrar messenger]];
 #endif
-    SqflitePlugin* instance = [[SqflitePlugin alloc] init];
+    VtsSqflitePlugin* instance = [[VtsSqflitePlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 
@@ -238,9 +238,9 @@ static NSInteger _databaseOpenCount = 0;
 
 + (NSArray*)toSqlArguments:(NSArray*)rawArguments {
     NSMutableArray* array = [NSMutableArray new];
-    if (![SqflitePlugin arrayIsEmpy:rawArguments]) {
+    if (![VtsSqflitePlugin arrayIsEmpy:rawArguments]) {
         for (int i = 0; i < [rawArguments count]; i++) {
-            [array addObject:[SqflitePlugin toSqlValue:[rawArguments objectAtIndex:i]]];
+            [array addObject:[VtsSqflitePlugin toSqlValue:[rawArguments objectAtIndex:i]]];
         }
     }
     return array;
@@ -249,7 +249,7 @@ static NSInteger _databaseOpenCount = 0;
 + (NSDictionary*)fromSqlDictionary:(NSDictionary*)sqlDictionary {
     NSMutableDictionary* dictionary = [NSMutableDictionary new];
     [sqlDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull value, BOOL * _Nonnull stop) {
-        [dictionary setObject:[SqflitePlugin fromSqlValue:value] forKey:key];
+        [dictionary setObject:[VtsSqflitePlugin fromSqlValue:value] forKey:key];
     }];
     return dictionary;
 }
@@ -258,8 +258,8 @@ static NSInteger _databaseOpenCount = 0;
 - (bool)executeOrError:(SqfliteDatabase*)database fmdb:(FMDatabase*)db call:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSString* sql = call.arguments[SqfliteParamSql];
     NSArray* arguments = call.arguments[SqfliteParamSqlArguments];
-    NSArray* sqlArguments = [SqflitePlugin toSqlArguments:arguments];
-    BOOL argumentsEmpty = [SqflitePlugin arrayIsEmpy:arguments];
+    NSArray* sqlArguments = [VtsSqflitePlugin toSqlArguments:arguments];
+    BOOL argumentsEmpty = [VtsSqflitePlugin arrayIsEmpy:arguments];
     if (sqfliteHasSqlLogLevel(database.logLevel)) {
         NSLog(@"%@ %@", sql, argumentsEmpty ? @"" : sqlArguments);
     }
@@ -291,7 +291,7 @@ static NSInteger _databaseOpenCount = 0;
         sqlite3_db_config(db.sqliteHandle, SQLITE_DBCONFIG_DEFENSIVE, 0, 0);
     }
 
-    BOOL argumentsEmpty = [SqflitePlugin arrayIsEmpy:sqlArguments];
+    BOOL argumentsEmpty = [VtsSqflitePlugin arrayIsEmpy:sqlArguments];
     if (sqfliteHasSqlLogLevel(database.logLevel)) {
         NSLog(@"%@ %@", sql, argumentsEmpty ? @"" : sqlArguments);
     }
@@ -386,7 +386,7 @@ static NSInteger _databaseOpenCount = 0;
         }
         NSMutableArray* row = [NSMutableArray new];
         for (int i = 0; i < columnCount; i++) {
-            [row addObject:[SqflitePlugin fromSqlValue:[self rsObjectForColumn:resultSet index:i]]];
+            [row addObject:[VtsSqflitePlugin fromSqlValue:[self rsObjectForColumn:resultSet index:i]]];
         }
         [rows addObject:row];
 
@@ -404,7 +404,7 @@ static NSInteger _databaseOpenCount = 0;
 - (bool)query:(SqfliteDatabase*)database fmdb:(FMDatabase*)db operation:(SqfliteOperation*)operation {
     NSString* sql = [operation getSql];
     NSArray* sqlArguments = [operation getSqlArguments];
-    bool argumentsEmpty = [SqflitePlugin arrayIsEmpy:sqlArguments];
+    bool argumentsEmpty = [VtsSqflitePlugin arrayIsEmpy:sqlArguments];
     // Non null means use a cursor
     NSNumber* cursorPageSize = [operation getArgument:_paramCursorPageSize];
 
@@ -428,7 +428,7 @@ static NSInteger _databaseOpenCount = 0;
         return false;
     }
 
-    NSMutableDictionary* results = [SqflitePlugin resultSetToResults:resultSet cursorPageSize:cursorPageSize];
+    NSMutableDictionary* results = [VtsSqflitePlugin resultSetToResults:resultSet cursorPageSize:cursorPageSize];
 
     if (cursorPageSize != nil) {
         bool cursorHasMoreData = [resultSet hasAnotherRow];
@@ -574,7 +574,7 @@ static NSInteger _databaseOpenCount = 0;
     NSNumber* readOnlyValue = call.arguments[_paramReadOnly];
     bool readOnly = [readOnlyValue boolValue] == true;
     NSNumber* singleInstanceValue = call.arguments[_paramSingleInstance];
-    bool inMemoryPath = [SqflitePlugin isInMemoryPath:path];
+    bool inMemoryPath = [VtsSqflitePlugin isInMemoryPath:path];
     // A single instance must be a regular database
     bool singleInstance = [singleInstanceValue boolValue] != false && !inMemoryPath;
 
@@ -593,7 +593,7 @@ static NSInteger _databaseOpenCount = 0;
                 if (_log) {
                     NSLog(@"re-opened %@singleInstance %@ id %@", database.inTransaction ? @"(in transaction) ": @"", path, database.databaseId);
                 }
-                result([SqflitePlugin makeOpenResult:database.databaseId recovered:true recoveredInTransaction:database.inTransaction]);
+                result([VtsSqflitePlugin makeOpenResult:database.databaseId recovered:true recoveredInTransaction:database.inTransaction]);
                 return;
             }
         }
@@ -669,7 +669,7 @@ static NSInteger _databaseOpenCount = 0;
                 }
             }
 
-            result([SqflitePlugin makeOpenResult: databaseId recovered:false recoveredInTransaction:false]);
+            result([VtsSqflitePlugin makeOpenResult: databaseId recovered:false recoveredInTransaction:false]);
         }];
     });
 }

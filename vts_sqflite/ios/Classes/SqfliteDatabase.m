@@ -1,5 +1,5 @@
 #import "SqfliteDatabase.h"
-#import "SqflitePlugin.h"
+#import "VtsSqflitePlugin.h"
 #import "SqfliteFmdbImport.m"
 
 #import <sqlite3.h>
@@ -69,7 +69,7 @@ static int transactionIdForce = -1;
 }
 
 - (void)dbRunQueuedOperations:(FMDatabase*)db {
-    while (![SqflitePlugin arrayIsEmpy:noTransactionOperationQueue]) {
+    while (![VtsSqflitePlugin arrayIsEmpy:noTransactionOperationQueue]) {
         if (currentTransactionId != nil) {
             break;
         }
@@ -86,7 +86,7 @@ static int transactionIdForce = -1;
         handler(db, operation);
     } else if (transactionId != nil && (transactionId.intValue == currentTransactionId.intValue || transactionId.intValue == transactionIdForce)) {
         handler(db, operation);
-        if (currentTransactionId == nil && ![SqflitePlugin arrayIsEmpy:noTransactionOperationQueue]) {
+        if (currentTransactionId == nil && ![VtsSqflitePlugin arrayIsEmpy:noTransactionOperationQueue]) {
             [self dbRunQueuedOperations:db];
         }
     } else {
@@ -147,7 +147,7 @@ static int transactionIdForce = -1;
         sqlite3_db_config(db.sqliteHandle, SQLITE_DBCONFIG_DEFENSIVE, 0, 0);
     }
     
-    BOOL argumentsEmpty = [SqflitePlugin arrayIsEmpy:sqlArguments];
+    BOOL argumentsEmpty = [VtsSqflitePlugin arrayIsEmpy:sqlArguments];
     if (sqfliteHasSqlLogLevel(logLevel)) {
         NSLog(@"%@ %@", sql, argumentsEmpty ? @"" : sqlArguments);
     }
@@ -250,7 +250,7 @@ static int transactionIdForce = -1;
 - (bool)dbDoQuery:(FMDatabase*)db operation:(SqfliteOperation*)operation {
     NSString* sql = [operation getSql];
     NSArray* sqlArguments = [operation getSqlArguments];
-    bool argumentsEmpty = [SqflitePlugin arrayIsEmpy:sqlArguments];
+    bool argumentsEmpty = [VtsSqflitePlugin arrayIsEmpy:sqlArguments];
     // Non null means use a cursor
     NSNumber* cursorPageSize = [operation getArgument:_paramCursorPageSize];
     
@@ -274,7 +274,7 @@ static int transactionIdForce = -1;
         return false;
     }
     
-    NSMutableDictionary* results = [SqflitePlugin resultSetToResults:resultSet cursorPageSize:cursorPageSize];
+    NSMutableDictionary* results = [VtsSqflitePlugin resultSetToResults:resultSet cursorPageSize:cursorPageSize];
     
     if (cursorPageSize != nil) {
         bool cursorHasMoreData = [resultSet hasAnotherRow];
@@ -325,7 +325,7 @@ static int transactionIdForce = -1;
             return;
         }
         FMResultSet* resultSet = cursor.resultSet;
-        NSMutableDictionary* results = [SqflitePlugin resultSetToResults:resultSet cursorPageSize:cursor.pageSize];
+        NSMutableDictionary* results = [VtsSqflitePlugin resultSetToResults:resultSet cursorPageSize:cursor.pageSize];
         
         bool cursorHasMoreData = [resultSet hasAnotherRow];
         if (cursorHasMoreData) {
