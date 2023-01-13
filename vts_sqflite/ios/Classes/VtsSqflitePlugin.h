@@ -3,14 +3,15 @@
 //  sqflite
 //
 //  Created by Alexandre Roux on 24/10/2022.
+//  Modified by Nam Huynh Nhat on 12/1/2023
 //
-#ifndef SqflitePlugin_h
-#define SqflitePlugin_h
+#ifndef VtsSqflitePlugin_h
+#define VtsSqflitePlugin_h
 
 #import "SqfliteImport.h"
 
 @class FMResultSet;
-@interface SqflitePlugin : NSObject<FlutterPlugin>
+@interface VtsSqflitePlugin : NSObject<FlutterPlugin>
 
 + (NSArray*)toSqlArguments:(NSArray*)rawArguments;
 + (bool)arrayIsEmpy:(NSArray*)array;
@@ -48,4 +49,4 @@ extern bool sqfliteHasSqlLogLevel(int logLevel);
 // True for verbose debugging
 extern bool sqfliteHasVerboseLogLevel(int logLevel);
 
-#endif // SqflitePlugin_h
+#endif // VtsSqflitePlugin_h

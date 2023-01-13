@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 Accss SQLite database.
                        DESC
-  s.homepage         = 'https://github.com/tekartik/sqflite'
+  s.homepage         = 'http://10.30.174.211:8709/gpmn/framework/local-database'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Tekartik' => 'alex@tekartik.com' }
   s.source           = { :path => '.' }
