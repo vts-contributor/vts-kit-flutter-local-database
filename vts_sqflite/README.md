@@ -27,10 +27,14 @@ If you don't know how to enable ProGuard for your project, follow these steps:
 buildTypes {    
   release {    
      minifyEnabled true   //this line  
- shrinkResources true    //this line proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'   //this line signingConfig signingConfigs.debug   }    
+     shrinkResources true    //this line 
+     proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'   //this line 
+     signingConfig signingConfigs.debug   
+  }    
   debug {    
      signingConfig signingConfigs.debug    
-} }  
+  } 
+}  
 ```  
 * Step 2: create file `proguard-rules.pro` in folder `android/app` (same location as build.gradle file)
 * Step 3: Add the `-keep ... ` line that we mentioned before.
